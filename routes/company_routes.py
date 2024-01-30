@@ -9,6 +9,7 @@ query = {
         "short_description",
         "website_url",
         "linkedin",
+        "permalink"
     ],
     "query": [
         {

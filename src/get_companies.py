@@ -3,6 +3,7 @@ import requests
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 from dotenv import load_dotenv
+import re
 
 load_dotenv()
 api_key = os.getenv("API_KEY")
@@ -37,6 +38,12 @@ def check_existing_companies(records, companies, worksheet):
         company_name = properties.get('name')
         website_url = properties.get('website_url')
         linkedin_url = properties.get('linkedin', {}).get('value')
+        permalink = properties.get("permalink")
+
+        if not permalink:
+            company_code = generate_company_code(company_name)
+        else:
+            company_code= permalink 
         
         if company_name not in existing_companies:
           new_companies.append({
@@ -44,10 +51,17 @@ def check_existing_companies(records, companies, worksheet):
               "website_url": website_url,
               "linkedin_url": linkedin_url
           })
-          # Add new company to the Google Sheet
-          row_values = ['contact_to_find@gmail.com', '', '', '', '', '', '', '', '', website_url, company_name, 'company_code_to_find']
+
+          row_values = ['contact_to_find@gmail.com', '', '', '', '', '', '', '', '', website_url, company_name, company_code]
           add_row_to_google_sheet(worksheet, row_values)
+          
     return new_companies
+
+def generate_company_code(company_name):
+    cleaned_name = re.sub(r'\W+', '', company_name).lower()
+    company_code = cleaned_name[:10]
+
+    return company_code
 
 # This should be changed to find_companies in the future and will take a payload from the frontend
 def get_companies(query_params):
