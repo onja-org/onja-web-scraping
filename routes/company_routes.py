@@ -20,11 +20,11 @@ query = {
             ]
         }
     ],
-    "limit": 100
+    "limit": 1000
 }
 
 
 @company_bp.route('/companies', methods=['GET'])
 def fetch_companies():
-    companies = get_companies(query)  # Assuming 'query' is defined in get_companies.py
+    companies = get_companies(query)
     return jsonify(companies)
