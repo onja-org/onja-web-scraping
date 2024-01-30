@@ -2,8 +2,8 @@ import os
 from dotenv import load_dotenv
 import requests
 import json
-import pandas as pd
-from pandas import json_normalize
+# import pandas as pd
+# from pandas import json_normalize
 
 load_dotenv()
 
@@ -33,10 +33,15 @@ query = {
 def company_count(query):
     r = requests.post("https://api.crunchbase.com/api/v4/searches/organizations", params = userkey , json = query)
     result = json.loads(r.text)
-    print(result)
-    total_companies = result["count"]
+    total_companies = result["entities"]
     return total_companies
 
 comp_count = company_count(query)
 
-print(comp_count)
+for element in comp_count:
+    details=element['properties']
+    names = details['name']
+    websiteUrls = details['website_url']
+    print(names)
+    print(websiteUrls)
+      
