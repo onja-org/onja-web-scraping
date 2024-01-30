@@ -23,7 +23,6 @@ query = {
     "limit": 100
 }
 
-
 @company_bp.route('/companies/bulk', methods=['GET'])
 def fetch_companies():
     companies = get_companies(query)
