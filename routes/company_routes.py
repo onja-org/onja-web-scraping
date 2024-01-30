@@ -24,7 +24,7 @@ query = {
 }
 
 
-@company_bp.route('/companies/bulks', methods=['GET'])
+@company_bp.route('/companies/bulk', methods=['GET'])
 def fetch_companies():
     companies = get_companies(query)
     return jsonify(companies)
