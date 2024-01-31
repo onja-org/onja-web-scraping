@@ -4,6 +4,7 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 from dotenv import load_dotenv
 import re
+from .company_code import extract_company_code
 
 load_dotenv()
 api_key = os.getenv("API_KEY")
@@ -38,18 +39,14 @@ def check_existing_companies(records, companies, worksheet):
         company_name = properties.get('name')
         website_url = properties.get('website_url')
         linkedin_url = properties.get('linkedin', {}).get('value')
-        permalink = properties.get("permalink")
-
-        if not permalink:
-            company_code = generate_company_code(company_name)
-        else:
-            company_code= permalink 
-        
+        company_code = extract_company_code(website_url)
+   
         if company_name not in existing_companies:
           new_companies.append({
               "name": company_name,
               "website_url": website_url,
-              "linkedin_url": linkedin_url
+              "linkedin_url": linkedin_url,
+              "company_code": company_code
           })
 
           row_values = ['contact_to_find@gmail.com', '', '', '', '', '', '', '', '', website_url, company_name, company_code]
