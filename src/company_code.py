@@ -13,6 +13,4 @@ def extract_company_code(url):
             return '.'.join(domain_segments[1:])
         else:
             return '.'.join(domain_segments)
-    else:
-        # Handle cases where the domain doesn't have at least two segments
-        return None
+  
