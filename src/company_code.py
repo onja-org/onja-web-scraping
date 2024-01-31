@@ -7,11 +7,12 @@ def extract_company_code(url):
     # Get the segments of the domain
     domain_segments = parsed_url.netloc.split('.')
 
-    # Extract the last two segments as the company code
+    # Handle common subdomains like 'www'
     if len(domain_segments) >= 2:
-        company_code = '.'.join(domain_segments[-2:])
-        return company_code
+        if domain_segments[0] == 'www':
+            return '.'.join(domain_segments[1:])
+        else:
+            return '.'.join(domain_segments)
     else:
         # Handle cases where the domain doesn't have at least two segments
         return None
-    

@@ -40,7 +40,7 @@ def check_existing_companies(records, companies, worksheet):
         website_url = properties.get('website_url')
         linkedin_url = properties.get('linkedin', {}).get('value')
         company_code = extract_company_code(website_url)
-   
+
         if company_name not in existing_companies:
           new_companies.append({
               "name": company_name,
