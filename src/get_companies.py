@@ -3,7 +3,6 @@ import requests
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 from dotenv import load_dotenv
-import re
 from .company_code import extract_company_code
 
 load_dotenv()
@@ -53,12 +52,6 @@ def check_existing_companies(records, companies, worksheet):
           add_row_to_google_sheet(worksheet, row_values)
           
     return new_companies
-
-def generate_company_code(company_name):
-    cleaned_name = re.sub(r'\W+', '', company_name).lower()
-    company_code = cleaned_name[:10]
-
-    return company_code
 
 # This should be changed to find_companies in the future and will take a payload from the frontend
 def get_companies(query_params):
