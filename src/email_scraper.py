@@ -46,7 +46,7 @@ def scrape_emails(user_url):
                 )
             )
             list_emails.update(new_emails)
-            soup = BeautifulSoup(response.text, "lxml")
+            soup = BeautifulSoup(response.text, features="xml")
             for tag in soup.find_all("a"):
                 if "href" in tag.attrs:
                     weblink = tag.attrs["href"]

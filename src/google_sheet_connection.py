@@ -1,12 +1,20 @@
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+api_key = os.getenv("API_KEY")
+userkey = {"user_key": api_key}
+SPREADSHEET_URL = os.getenv('SPREADSHEET_URL')
 
 def connect_to_google_spreadsheet():
     """Connects to the Google Sheets API and returns the spreadsheet."""
     scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
     creds = ServiceAccountCredentials.from_json_keyfile_name('cat-db.json', scope)
     client = gspread.authorize(creds)
-    spreadsheet = client.open('Copy of First Copy of CAT database and analytics  for duplication analysis')
+    spreadsheet_url = SPREADSHEET_URL
+    spreadsheet = client.open_by_url(spreadsheet_url)
     return spreadsheet
 
 def get_google_sheet_records():
