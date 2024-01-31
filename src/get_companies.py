@@ -1,31 +1,14 @@
 import os
 import requests
-import gspread
-from oauth2client.service_account import ServiceAccountCredentials
 from dotenv import load_dotenv
+
+from src.google_sheet_connection import connect_to_google_spreadsheet, get_google_sheet_records, add_row_to_google_sheet
+from src.email_scraper import scrape_emails
+
 
 load_dotenv()
 api_key = os.getenv("API_KEY")
 userkey = {"user_key": api_key}
-
-def connect_to_google_spreadsheet():
-    """Connects to the Google Sheets API and returns the spreadsheet."""
-    scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
-    creds = ServiceAccountCredentials.from_json_keyfile_name('cat-db.json', scope)
-    client = gspread.authorize(creds)
-    spreadsheet = client.open('Copy of First Copy of CAT database and analytics  for duplication analysis')
-    return spreadsheet
-
-def get_google_sheet_records():
-    """Fetches records from the Google Sheet and returns them."""
-    spreadsheet = connect_to_google_spreadsheet()
-    worksheet = spreadsheet.get_worksheet(0)
-    data = worksheet.get_all_records()
-    return data
-
-def add_row_to_google_sheet(worksheet, row_values):
-    """Adds a row with the specified values to the Google Sheet."""
-    worksheet.append_row(row_values)
 
 def check_existing_companies(records, companies, worksheet):
     """Checks for existing companies and adds new ones to the Google Sheet."""
@@ -37,16 +20,20 @@ def check_existing_companies(records, companies, worksheet):
         company_name = properties.get('name')
         website_url = properties.get('website_url')
         linkedin_url = properties.get('linkedin', {}).get('value')
+
+        emails = scrape_emails(website_url)
         
         if company_name not in existing_companies:
-          new_companies.append({
-              "name": company_name,
-              "website_url": website_url,
-              "linkedin_url": linkedin_url
-          })
-          # Add new company to the Google Sheet
-          row_values = ['contact_to_find@gmail.com', '', '', '', '', '', '', '', '', website_url, company_name, 'company_code_to_find']
-          add_row_to_google_sheet(worksheet, row_values)
+            new_companies.append({
+                "name": company_name,
+                "website_url": website_url,
+                "linkedin_url": linkedin_url,
+                "emails": emails
+            })
+            # Add new company to the Google Sheet
+            row_values = [", ".join(emails), '', '', '', '', '', '', '', '', website_url, company_name, 'company_code_to_find']
+            add_row_to_google_sheet(worksheet, row_values)
+
     return new_companies
 
 # This should be changed to find_companies in the future and will take a payload from the frontend
