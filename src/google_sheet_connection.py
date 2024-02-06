@@ -14,7 +14,7 @@ def connect_to_google_spreadsheet():
     creds = ServiceAccountCredentials.from_json_keyfile_name('cat-db.json', scope)
     client = gspread.authorize(creds)
     spreadsheet_url = SPREADSHEET_URL
-    spreadsheet = client.open_by_url(spreadsheet_url)
+    spreadsheet = client.open("Copy of First Copy of CAT database and analytics  for duplication analysis")
     return spreadsheet
 
 def get_google_sheet_records():

@@ -1,14 +1,14 @@
 from flask import Blueprint, jsonify
-from src.get_companies import get_companies
+from src.find_companies import find_companies
 
 company_bp = Blueprint('company_bp', __name__)
 
 query = {
     "field_ids": [
         "name",
-        "short_description",
         "website_url",
         "linkedin",
+        'contact_email'
     ],
     "query": [
         {
@@ -20,11 +20,11 @@ query = {
             ]
         }
     ],
-    "limit": 1000
+    "limit": 50
 }
 
 
 @company_bp.route('/companies/bulk', methods=['GET'])
 def fetch_companies():
-    companies = get_companies(query)
+    companies = find_companies(query)
     return jsonify(companies)

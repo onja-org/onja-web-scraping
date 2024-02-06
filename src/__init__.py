@@ -1,3 +1,3 @@
-from .get_companies import get_companies
+from .find_companies import find_companies
 
-__all__ = ['get_companies']
+__all__ = ['find_companies']
