@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify
 from src.find_companies import find_companies
+import logging
 
 company_bp = Blueprint('company_bp', __name__)
 
@@ -7,8 +8,8 @@ query = {
     "field_ids": [
         "name",
         "website_url",
-        "linkedin",
-        'contact_email'
+        # "linkedin",
+        # 'contact_email'
     ],
     "query": [
         {
@@ -22,9 +23,10 @@ query = {
     ],
     "limit": 50
 }
+output_csv_file = 'companies_data.csv'
 
 
 @company_bp.route('/companies/bulk', methods=['GET'])
 def fetch_companies():
-    companies = find_companies(query)
+    companies = find_companies(query, output_csv_file)
     return jsonify(companies)

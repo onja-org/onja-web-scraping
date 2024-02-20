@@ -11,10 +11,10 @@ SPREADSHEET_URL = os.getenv('SPREADSHEET_URL')
 def connect_to_google_spreadsheet():
     """Connects to the Google Sheets API and returns the spreadsheet."""
     scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
-    creds = ServiceAccountCredentials.from_json_keyfile_name('cat-db.json', scope)
+    creds = ServiceAccountCredentials.from_json_keyfile_name('onja-cat-fanilo.json', scope)
     client = gspread.authorize(creds)
     spreadsheet_url = SPREADSHEET_URL
-    spreadsheet = client.open("Copy of First Copy of CAT database and analytics  for duplication analysis")
+    spreadsheet = client.open("CAT database and analytics  for duplication analysis")
     return spreadsheet
 
 def get_google_sheet_records():
